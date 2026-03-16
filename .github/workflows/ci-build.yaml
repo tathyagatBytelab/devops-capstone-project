@@ -20,17 +20,17 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready"
+          --health-cmd="pg_isready -U postgres"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
@@ -39,11 +39,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Lint with flake8
+      - name: Run Flake8 Linter
         run: |
           flake8 service
 
-      - name: Run unit tests
+      - name: Run Unit Tests
         env:
           DATABASE_URI: postgresql://postgres:postgres@localhost:5432/accounts
         run: |
