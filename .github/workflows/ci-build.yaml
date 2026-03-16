@@ -39,6 +39,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+          # Fix nose compatibility in CI
+          sed -i 's/collections.Callable/collections.abc.Callable/g' $(python -c "import site; print(site.getsitepackages()[0])")/nose/suite.py
+          sed -i 's/collections.Callable/collections.abc.Callable/g' $(python -c "import site; print(site.getsitepackages()[0])")/nose/case.py
+
       - name: Run Flake8 Linter
         run: |
           flake8 service
